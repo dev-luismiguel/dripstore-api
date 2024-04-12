@@ -1,15 +1,13 @@
 const express = require('express');
+const productController = require('../controller/productController')
+
 const router = express.Router();
 
-const mockProduct = {
-    id: 1,
-    name: 'Tenis'
-}
-
 // Rota para obter todos os itens
-router.get('/', (req, res) => {
-    res.send(mockProduct)
-});
-
+router.get('/', productController.getAllProducts);
+router.get('/:id', productController.getProductById);
+router.post('/', productController.createProduct);
+router.put('/:id', productController.updateProduct);
+router.delete('/:id', productController.deleteProduct);
 
 module.exports = router;
