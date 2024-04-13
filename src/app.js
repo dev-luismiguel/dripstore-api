@@ -1,5 +1,6 @@
 const express = require('express')
 const productRoutes = require('./routes/productRoutes');
+const database = require('./config/database');
 
 const app = express()
 const PORT = 3000
@@ -12,6 +13,8 @@ app.get('/', (req, res) => {
 
 app.use('/api/product', productRoutes)
 
-app.listen(PORT, () => {
-  console.log(`App running on PORT ${PORT}`)
+database.initializeDatabase().then(() => {
+  app.listen(PORT, () => {
+    console.log(`App running on PORT ${PORT}`)
+  })
 })

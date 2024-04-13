@@ -1,4 +1,5 @@
 const httpStatus = require('http-status');
+const Product = require('../models/productModel'); // Adjust the path according to your project structure
 
 const mockProducts = [
     {
@@ -11,22 +12,27 @@ const mockProducts = [
     }
 ]
 
-function getAllProducts(req, res) {
-    res.send(mockProducts);
-}
+async function getAllProducts(req, res) {
+    try {
+        const products = await Product.findAll();
+        return res.status(200).json(products);
+      } catch (error) {
+        return res.status(500).json({ error: error.message });
+      }
+  }
 
 function getProductById(req, res) {
     const product = mockProducts.find((product) => product.id == req.params.id);
     res.send(product);
 }
 
-function createProduct(req, res) {
-    const newProduct = {
-        id: mockProducts.length + 1,
-        name: req.body.name,
+async function createProduct(req, res) {
+    try {
+      const product = await Product.create(req.body);
+      return res.status(201).json(product);
+    } catch (error) {
+      return res.status(400).json({ error: error.message });
     }
-    mockProducts.push(newProduct);
-    res.status(httpStatus.CREATED).send(newProduct);
 }
 
 function updateProduct(req, res) {
