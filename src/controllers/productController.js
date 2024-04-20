@@ -1,29 +1,23 @@
 const httpStatus = require('http-status');
 const Product = require('../models/productModel'); // Adjust the path according to your project structure
 
-const mockProducts = [
-    {
-        id: 1,
-        name: 'Tenis'
-    },
-    {
-        id: 2,
-        name: 'Raquete'
-    }
-]
-
 async function getAllProducts(req, res) {
     try {
         const products = await Product.findAll();
-        return res.status(200).json(products);
+        return res.status(httpStatus.OK).json(products);
       } catch (error) {
-        return res.status(500).json({ error: error.message });
+        return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ error: error.message });
       }
   }
 
-function getProductById(req, res) {
-    const product = mockProducts.find((product) => product.id == req.params.id);
-    res.send(product);
+async function getProductById(req, res) {
+    try {
+        const product = await Product.findByPk(req.params.id)
+        return res.send(product);
+    } catch (error) {
+        return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ error: error.message });
+
+    }
 }
 
 async function createProduct(req, res) {
@@ -35,33 +29,44 @@ async function createProduct(req, res) {
     }
 }
 
-function updateProduct(req, res) {
-    const productIndex = mockProducts.findIndex((product) => product.id == req.params.id);
+async function updateProduct(req, res) {
+    const productId = req.params.id;
+    const newName = req.body.name;
 
-    if (productIndex === -1) {
-        res.status(httpStatus.NOT_FOUND).send("Produto não encontrado");
-        return;
+    try {
+        const updatedProduct = await Product.update(
+            { name: newName },
+            { where: { id: productId } }
+        );
+
+        if (updatedProduct[0] === 1) {
+            res.status(200).send("Product updated successfully.");
+        } else {
+            res.status(404).send("Product not found.");
+        }
+    } catch (error) {
+        res.status(500).send("Error updating product: " + error.message);
     }
-
-    const updatedProduct = mockProducts[productIndex];
-    updatedProduct.name = req.body.name;
-    mockProducts.splice(productIndex, 1, updatedProduct);
-
-    res.send(updatedProduct)
 }
 
-function deleteProduct(req, res) {
-    const productIndex = mockProducts.findIndex((product) => product.id == req.params.id);
+async function deleteProduct(req, res) {
+    const productId = req.params.id;
 
-    if (productIndex === -1) {
-        res.status(httpStatus.NOT_FOUND).send("Produto não encontrado");
-        return;
+    try {
+        const deletedCount = await Product.destroy({
+            where: { id: productId }
+        });
+
+        if (deletedCount === 1) {
+            res.status(200).send("Product deleted successfully.");
+        } else {
+            res.status(404).send("Product not found.");
+        }
+    } catch (error) {
+        res.status(500).send("Error deleting product: " + error.message);
     }
-
-    mockProducts.splice(productIndex, 1);
-    
-    res.send("Produto deletado");
 }
+
 
 module.exports = {
     getAllProducts,
