@@ -8,10 +8,12 @@ COPY package*.json ./
 
 RUN npm install
 
+RUN npm install -g sequelize-cli
+
 USER node
 
 COPY . .
 
 EXPOSE 3000
 
-CMD ["npm", "run", "dev"]
+CMD ["sh", "-c", "sequelize db:migrate && npm run dev"]

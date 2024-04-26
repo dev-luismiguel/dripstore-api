@@ -1,0 +1,10 @@
+{
+  "eslint.format.enable": true,
+  "eslint.rules.customizations": [
+    {
+      "rule": "*",
+      "severity": "warn"
+    }
+  ],
+  "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+}
