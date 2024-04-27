@@ -7,10 +7,11 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 
 RUN npm install
-
-USER node
+RUN npm install -g sequelize
 
 COPY . .
+
+USER node
 
 EXPOSE 3000
 

@@ -1,5 +1,6 @@
 const { DataTypes } = require("sequelize");
 const database = require("../config/database");
+const Product = require("./productModel");
 
 const Category = database.sequelize.define(
   "Category",
@@ -10,9 +11,8 @@ const Category = database.sequelize.define(
       autoIncrement: true,
       allowNull: false,
     },
-    name: {
-      type: DataTypes.STRING,
-    },
+    name: DataTypes.STRING,
+    description: DataTypes.STRING,
   },
   {
     timestamps: false,

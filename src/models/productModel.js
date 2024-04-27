@@ -1,5 +1,6 @@
 const { DataTypes } = require("sequelize");
 const database = require("../config/database");
+const Category = require("./categoryModel");
 
 const Product = database.sequelize.define(
   "Product",
@@ -19,14 +20,11 @@ const Product = database.sequelize.define(
     gender: {
       type: DataTypes.STRING,
     },
-    category: {
-      type: DataTypes.STRING,
-    },
     brand: {
       type: DataTypes.STRING,
     },
     listUrlImg: {
-      type: DataTypes.ARRAY(DataTypes.STRING), // This assumes the use of PostgreSQL
+      type: DataTypes.ARRAY(DataTypes.STRING),
     },
     department: {
       type: DataTypes.STRING,
@@ -55,5 +53,8 @@ const Product = database.sequelize.define(
     tableName: "products",
   }
 );
+
+Category.hasMany(Product);
+Product.belongsTo(Category);
 
 module.exports = Product;
