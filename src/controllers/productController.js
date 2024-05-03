@@ -15,7 +15,7 @@ async function getAllProducts(req, res) {
 async function getProductById(req, res) {
   try {
     const product = await Product.findByPk(req.params.id, {
-      include: "category",
+      include: "Category",
     });
 
     return res.send(product);
