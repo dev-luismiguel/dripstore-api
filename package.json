@@ -4,8 +4,10 @@
   "description": "When you're ready, start your application by running: `docker compose up --build`.",
   "main": "src/app.js",
   "scripts": {
-    "dev": "nodemon -L",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon --env-file=.env",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "db:migrate": "npx sequelize-cli db:migrate",
+    "db:migration:generate": "npx sequelize-cli migration:generate --name migration-skeleton"
   },
   "author": "",
   "license": "ISC",

@@ -7,18 +7,13 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.DataTypes.INTEGER
       },
       name: {
-        type: Sequelize.STRING
+        type: Sequelize.DataTypes.STRING
       },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE
+      description: {
+        type: Sequelize.DataTypes.STRING
       }
     });
   },

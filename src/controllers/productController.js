@@ -1,9 +1,9 @@
 const httpStatus = require("http-status");
-const Product = require("../models/productModel");
+const models = require("../models");
 
 async function getAllProducts(req, res) {
   try {
-    const products = await Product.findAll();
+    const products = await models.Product.findAll();
     return res.status(httpStatus.OK).json(products);
   } catch (error) {
     return res
@@ -14,8 +14,8 @@ async function getAllProducts(req, res) {
 
 async function getProductById(req, res) {
   try {
-    const product = await Product.findByPk(req.params.id, {
-      include: "category",
+    const product = await models.Product.findByPk(req.params.id, {
+      include: "Category",
     });
 
     return res.send(product);
@@ -28,7 +28,7 @@ async function getProductById(req, res) {
 
 async function createProduct(req, res) {
   try {
-    const product = await Product.create(req.body);
+    const product = await models.Product.create(req.body);
     return res.status(201).json(product);
   } catch (error) {
     return res.status(400).json({ error: error.message });
@@ -40,7 +40,7 @@ async function updateProduct(req, res) {
   const newName = req.body.name;
 
   try {
-    const updatedProduct = await Product.update(
+    const updatedProduct = await models.Product.update(
       { name: newName },
       { where: { id: productId } }
     );
@@ -59,7 +59,7 @@ async function deleteProduct(req, res) {
   const productId = req.params.id;
 
   try {
-    const deletedCount = await Product.destroy({
+    const deletedCount = await models.Product.destroy({
       where: { id: productId },
     });
 

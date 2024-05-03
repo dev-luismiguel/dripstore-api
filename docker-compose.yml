@@ -1,17 +1,6 @@
 version: "3.8"
 
 services:
-  app:
-    build: .
-    command: npx sequelize-cli db:migrate && npm run dev
-    ports:
-      - "3000:3000"
-    environment:
-      - DATABASE_URL=postgres://postgres:password@db:5432/myapp
-    depends_on:
-      db:
-        condition: service_healthy
-
   db:
     image: postgres:13
     environment:

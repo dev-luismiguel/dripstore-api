@@ -47,14 +47,12 @@ const Product = database.sequelize.define(
     description: {
       type: DataTypes.TEXT,
     },
+    categoryId: DataTypes.INTEGER,
   },
   {
     timestamps: false,
     tableName: "products",
   }
 );
-
-Category.hasMany(Product);
-Product.belongsTo(Category);
 
 module.exports = Product;
