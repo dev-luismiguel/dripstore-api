@@ -1,25 +1,35 @@
-"use strict";
+'use strict';
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.removeColumn("products", "category");
+    const table = await queryInterface.describeTable('products');
 
-    await queryInterface.addColumn("products", "categoryId", {
-      type: Sequelize.INTEGER,
-      references: {
-        model: "Categories",
-        key: "id",
-      },
-      onUpdate: "CASCADE",
-      onDelete: "SET NULL",
-    });
+    if (table.category) {
+      await queryInterface.removeColumn('products', 'category');
+    }
+
+    if (!table.categoryId) {
+      await queryInterface.addColumn('products', 'categoryId', {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'Categories',
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'SET NULL',
+      });
+    }
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.removeColumn("products", "categoryId");
+    const table = await queryInterface.describeTable('products');
 
-    await queryInterface.addColumn("products", "category", {
+    if (table.categoryId) {
+      await queryInterface.removeColumn('products', 'categoryId');
+    }
+
+    await queryInterface.addColumn('products', 'category', {
       type: Sequelize.STRING,
     });
   },
