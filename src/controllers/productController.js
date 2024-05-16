@@ -1,9 +1,24 @@
 const httpStatus = require("http-status");
+<<<<<<< HEAD
 const Product = require("../models/productModel");
 
 async function getAllProducts(req, res) {
   try {
     const products = await Product.findAll();
+=======
+const Product = require("../models/product");
+
+async function getAllProducts(req, res) {
+  try {
+    const products = await Product.findAll({
+      include: [
+        {
+          model: Category,
+          as: "category",
+        },
+      ],
+    });
+>>>>>>> upstream/fk
     return res.status(httpStatus.OK).json(products);
   } catch (error) {
     return res
@@ -14,10 +29,14 @@ async function getAllProducts(req, res) {
 
 async function getProductById(req, res) {
   try {
+<<<<<<< HEAD
     const product = await Product.findByPk(req.params.id, {
       include: "Category",
     });
 
+=======
+    const product = await Product.findByPk(req.params.id);
+>>>>>>> upstream/fk
     return res.send(product);
   } catch (error) {
     return res

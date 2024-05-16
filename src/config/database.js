@@ -1,4 +1,6 @@
 const { Sequelize } = require("sequelize");
+const { Sequelize } = require('sequelize');
+const productModel = require('../models/product');
 
 const sequelize = new Sequelize(process.env.DATABASE_URL, {
   dialect: "postgres",
