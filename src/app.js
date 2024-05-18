@@ -1,6 +1,7 @@
 const express = require("express");
 const productRoutes = require("./routes/productRoutes");
 const categoryRoutes = require("./routes/categoryRoutes");
+const authenticationRoutes = require("./routes/authenticationRoutes");
 const database = require("./config/database");
 const jwt = require("jsonwebtoken");
 const cors = require('cors');
@@ -22,17 +23,8 @@ app.get("/", (req, res) => {
 
 app.use("/api/products", productRoutes);
 app.use("/api/category", categoryRoutes);
+app.use("/api/authentication", authenticationRoutes);
 
-app.post("/login", (req, res) => {
-  const { username, password } = req.body;
-
-  if (username === "admin" && password === "password") {
-    const token = jwt.sign({ username }, jwtSecret, { expiresIn: "1y" });
-    return res.json({ message: "Authentication successful!", token });
-  } else {
-    return res.status(401).json({ message: "Authentication failed!" });
-  }
-});
 
 database.initializeDatabase().then(() => {
   app.listen(PORT, () => {

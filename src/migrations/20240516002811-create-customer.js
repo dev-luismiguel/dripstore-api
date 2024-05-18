@@ -60,6 +60,10 @@ module.exports = {
         allowNull: false,
         defaultValue: Sequelize.NOW,
       },
+      password: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      }
     });
   },
 
