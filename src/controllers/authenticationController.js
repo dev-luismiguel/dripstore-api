@@ -1,6 +1,4 @@
-const { username, password } = req.body;
 const bcrypt = require('bcrypt');
-const User = require('./models/User'); // Adjust the path as necessary
 
 // implement db
 
@@ -13,4 +11,8 @@ async function login(req, res) {
   } else {
     return res.status(401).json({ message: "Authentication failed!" });
   }
+}
+
+module.exports = {
+  login
 }
