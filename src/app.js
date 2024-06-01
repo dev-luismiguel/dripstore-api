@@ -3,6 +3,7 @@ const productRoutes = require("./routes/productRoutes");
 const categoryRoutes = require("./routes/categoryRoutes");
 const authenticationRoutes = require("./routes/authenticationRoutes");
 const customerRoutes = require("./routes/customerRoutes");
+const orderRoutes = require("./routes/orderRoutes");
 const database = require("./config/database");
 const jwt = require("jsonwebtoken");
 const cors = require('cors');
@@ -26,6 +27,7 @@ app.use("/api/products", productRoutes);
 app.use("/api/category", categoryRoutes);
 app.use("/api/authentication", authenticationRoutes);
 app.use("/api/customer", customerRoutes);
+app.use("/api/order", orderRoutes);
 app.use('/doc', swaggerUi.serve, swaggerUi.setup(swaggerFile))
 
 database.initializeDatabase().then(() => {

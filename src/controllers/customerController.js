@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const { Op } = require("sequelize");
 
 const Customer = require("../models/customerModel");
 
@@ -18,7 +19,9 @@ async function createCustomer(req, res) {
   } = req.body;
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  const existingCustomer = await Customer.findOne({ [Op.or]: [{ email }, { cpf }] });
+  const existingCustomer = await Customer.findOne({
+    where: { [Op.or]: [{ email }, { cpf }] },
+  });
 
   if (existingCustomer) {
     return res.status(400).json({ error: "Customer already exists" });
@@ -40,9 +43,13 @@ async function createCustomer(req, res) {
 
     delete customer.password;
 
-    const token = jwt.sign({ customer: { email } }, process.env.JWT_SECRET_KEY, {
-      expiresIn: "1y",
-    });
+    const token = jwt.sign(
+      { customer: { email } },
+      process.env.JWT_SECRET_KEY,
+      {
+        expiresIn: "1y",
+      }
+    );
 
     return res
       .status(201)

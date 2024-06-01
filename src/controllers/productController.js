@@ -28,6 +28,7 @@ async function getProductById(req, res) {
 
 async function createProduct(req, res) {
   try {
+    // Exemplo de vulnerabilidade
     const product = await Product.create(req.body);
     return res.status(201).json(product);
   } catch (error) {
