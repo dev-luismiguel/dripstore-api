@@ -1,16 +1,24 @@
 const Order = require("../models/orderModel");
 const Product = require("../models/productModel");
+const OrderItem = require("../models/orderItemModel");
 
 async function createOrder(req, res) {
   try {
-    const { products } = req.body;
+    const { productsList, customer_id } = req.body;
 
-    const customer_id = req.user.customer_id;
+    if (!productsList || !Array.isArray(productsList) || productsList.length === 0) {
+      return res.status(400).json({ error: "Products array is required and cannot be empty" });
+    }
 
-    const ids = products.map((product) => product.id);
+    if (!customer_id) {
+      return res.status(400).json({ error: "Customer ID is required" });
+    }
+
+    const ids = productsList.map((product) => product.id);
+    console.log(ids);
     const dbProducts = await Product.findAll({ where: { id: ids } });
 
-    if (dbProducts.length !== products.length) {
+    if (dbProducts.length !== productsList.length) {
       return res.status(400).json({ error: "One or more products not found" });
     }
 
@@ -19,10 +27,9 @@ async function createOrder(req, res) {
       customer_id,
     });
 
-    console.log('order', order);
-
-    const orderItems = products.map((product) => {
-      const dbProduct = dbProducts.find((p) => p.id === product.id);
+    const orderItems = productsList.map((product) => {
+      const dbProduct = dbProducts.find((p) => p.id.toString() === product.id);
+      console.log(dbProduct)
       return {
         order_id: order.id,
         product_id: product.id,
@@ -34,8 +41,10 @@ async function createOrder(req, res) {
     await OrderItem.bulkCreate(orderItems);
 
     return res.status(201).json(order);
+  
   } catch (err) {
-    console.log(err);
+    console.error(err);
+    return res.status(500).json({ error: "An error occurred while creating the order // " + err.message });
   }
 }
 

@@ -1,8 +1,10 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const { Op } = require("sequelize");
+const dotenv = require('dotenv');
 
 const Customer = require("../models/customerModel");
+dotenv.config();
 
 async function createCustomer(req, res) {
   const {
@@ -28,6 +30,7 @@ async function createCustomer(req, res) {
   }
 
   try {
+    console.log('Enter in the try-again');
     const customer = await Customer.create({
       email,
       password: hashedPassword,
