@@ -28,7 +28,49 @@ async function getProductById(req, res) {
 
 async function createProduct(req, res) {
   try {
-    const product = await Product.create(req.body);
+    const {
+      urlImg,
+      name,
+      gender,
+      brand,
+      listUrlImg,
+      department,
+      price,
+      assessment,
+      discountValue,
+      listOfSize,
+      trending,
+      description,
+    } = req.body;
+
+    const productData = {
+      urlImg,
+      name,
+      gender,
+      brand,
+      department,
+      price,
+      assessment,
+      discountValue,
+      trending,
+      description,
+    };
+
+    if (Array.isArray(listUrlImg)) {
+      productData.listUrlImg = listUrlImg;
+    } else if (typeof listUrlImg === "string") {
+      productData.listUrlImg = listUrlImg.split(",").map((item) => item.trim());
+    }
+
+    if (Array.isArray(listOfSize)) {
+      productData.listOfSize = listOfSize;
+    } else if (typeof listOfSize === "string") {
+      productData.listOfSize = listOfSize
+        .split(",")
+        .map((item) => parseInt(item.trim(), 10));
+    }
+
+    const product = await Product.create(productData);
     return res.status(201).json(product);
   } catch (error) {
     return res.status(400).json({ error: error.message });
@@ -37,13 +79,54 @@ async function createProduct(req, res) {
 
 async function updateProduct(req, res) {
   const productId = req.params.id;
-  const newName = req.body.name;
+  const {
+    urlImg,
+    name,
+    gender,
+    brand,
+    listUrlImg,
+    department,
+    price,
+    assessment,
+    discountValue,
+    listOfSize,
+    trending,
+    description,
+  } = req.body;
 
   try {
-    const updatedProduct = await Product.update(
-      { name: newName },
-      { where: { id: productId } }
-    );
+    const updatedFields = {
+      urlImg,
+      name,
+      gender,
+      brand,
+      department,
+      price,
+      assessment,
+      discountValue,
+      trending,
+      description,
+    };
+
+    if (Array.isArray(listUrlImg)) {
+      updatedFields.listUrlImg = listUrlImg;
+    } else if (typeof listUrlImg === "string") {
+      updatedFields.listUrlImg = listUrlImg
+        .split(",")
+        .map((item) => item.trim());
+    }
+
+    if (Array.isArray(listOfSize)) {
+      updatedFields.listOfSize = listOfSize;
+    } else if (typeof listOfSize === "string") {
+      updatedFields.listOfSize = listOfSize
+        .split(",")
+        .map((item) => parseInt(item.trim(), 10));
+    }
+
+    const updatedProduct = await Product.update(updatedFields, {
+      where: { id: productId },
+    });
 
     if (updatedProduct[0] === 1) {
       res.status(200).send("Product updated successfully.");
@@ -51,6 +134,7 @@ async function updateProduct(req, res) {
       res.status(404).send("Product not found.");
     }
   } catch (error) {
+    console.error(error);
     res.status(500).send("Error updating product: " + error.message);
   }
 }

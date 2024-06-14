@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "Dripstore API Documentation",
+    "title": "My API",
     "description": "Description",
     "version": "1.0.0"
   },
@@ -24,9 +24,19 @@
     "/api/products/": {
       "get": {
         "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
         "responses": {
-          "default": {
-            "description": ""
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
           }
         }
       },
@@ -144,7 +154,7 @@
             "schema": {
               "type": "object",
               "properties": {
-                "email": {
+                "username": {
                   "example": "any"
                 },
                 "password": {
@@ -160,98 +170,6 @@
           },
           "401": {
             "description": "Unauthorized"
-          }
-        }
-      }
-    },
-    "/api/customer/": {
-      "post": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "email": {
-                  "example": "any"
-                },
-                "password": {
-                  "example": "any"
-                },
-                "nome_completo": {
-                  "example": "any"
-                },
-                "cpf": {
-                  "example": "any"
-                },
-                "celular": {
-                  "example": "any"
-                },
-                "cep": {
-                  "example": "any"
-                },
-                "endereco": {
-                  "example": "any"
-                },
-                "bairro": {
-                  "example": "any"
-                },
-                "cidade": {
-                  "example": "any"
-                },
-                "complemento": {
-                  "example": "any"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Created"
-          },
-          "400": {
-            "description": "Bad Request"
-          }
-        }
-      }
-    },
-    "/api/order/": {
-      "post": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "products": {
-                  "example": "any"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Created"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
           }
         }
       }

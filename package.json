@@ -6,8 +6,10 @@
   "scripts": {
     "dev": "nodemon --env-file=.env.local",
     "test": "echo \"Error: no test specified\" && exit 1",
+    "swagger:gen": "node src/utils/swagger.js",
+    "db:start": "docker-compose up -d --build",
     "db:migrate": "npx sequelize-cli db:migrate",
-    "swagger:gen": "node src/utils/swagger.js"
+    "db:migration:new": "npx sequelize-cli migration:generate --name"
   },
   "author": "",
   "license": "ISC",
