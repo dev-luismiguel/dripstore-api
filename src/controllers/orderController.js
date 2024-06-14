@@ -1,11 +1,14 @@
-const Order = require("../models/orderModel");
-const Product = require("../models/productModel");
+const models = require("../models");
+
+const Order = models.Order;
+const OrderItem = models.OrderItem;
+const Product = models.Product;
 
 async function createOrder(req, res) {
   try {
     const { products } = req.body;
 
-    const customer_id = req.user.customer_id;
+    const { id: customer_id } = req.user;
 
     const ids = products.map((product) => product.id);
     const dbProducts = await Product.findAll({ where: { id: ids } });
@@ -19,15 +22,14 @@ async function createOrder(req, res) {
       customer_id,
     });
 
-    console.log('order', order);
-
     const orderItems = products.map((product) => {
-      const dbProduct = dbProducts.find((p) => p.id === product.id);
+      const dbProduct = dbProducts.find((p) => p.id === Number(product.id));
       return {
         order_id: order.id,
         product_id: product.id,
         quantity: product.quantity,
         price: dbProduct.price,
+        customer_id,
       };
     });
 
@@ -37,6 +39,20 @@ async function createOrder(req, res) {
   } catch (err) {
     console.log(err);
   }
+}
+
+async function getCustomerOrders(req, res) {
+  const { id: customer_id } = req.user;
+  const orders = await Order.findAll({
+    where: { customer_id },
+    include: {
+      model: OrderItem,
+      include: {
+        model: Product,
+      },
+    },
+  });
+  return res.status(200).json(orders);
 }
 
 function generateOrderNumber() {
@@ -51,4 +67,5 @@ function generateOrderNumber() {
 
 module.exports = {
   createOrder,
+  getCustomerOrders,
 };
